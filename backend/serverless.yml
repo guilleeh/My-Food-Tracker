@@ -1,32 +1,102 @@
 # NOTE: update this with your service name
-service: notes-api
+service: my-food-tracker-api
 
 # Create an optimized package for our functions 
 package:
   individually: true
 
 plugins:
-  - serverless-bundle # Package our functions with Webpack
+  - serverless-webpack
+  - serverless-reqvalidator-plugin
+  - serverless-iam-roles-per-function
+  - serverless-aws-documentation
   - serverless-offline
-  - serverless-dotenv-plugin # Load .env as environment variables
 
 provider:
   name: aws
-  runtime: nodejs10.x
-  stage: dev
-  region: us-west-2
-  # To load environment variables externally
-  # rename env.example to .env and uncomment
-  # the following line. Also, make sure to not
-  # commit your .env.
-  #
-  #environment:
-  #  SAMPLE_ENV_VAR: ${env:SAMPLE_ENV_VAR}
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-west-2'}
+  tracing:
+    lambda: true
+    apiGateway: true
+  environment:
+    FOOD_LOGS_TABLE: FoodLogs-${self:provider.stage}
+    FOOD_LOGS_S3_BUCKET: my-food-tracker-files-${self:provider.stage}
+    CREATED_AT_INDEX: createdAtIndex
+
+custom:
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: My Food Tracker API
+        description: Serverless application for logging your food.
 
 functions:
-  hello:
-    handler: handler.hello
+  CreateFoodLog:
+    handler: src/lambda/http/createFoodLog.handler
+    iamRoleStatementsName: CreateFoodLog
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FOOD_LOGS_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+        Resource: "*"
+      - Effect: Allow
+        Action:
+          - logs:CreateLogStream
+          - logs:CreateLogGroup
+          - logs:PutLogEvents
+          - events:PutRule
+        Resource: "*"
     events:
       - http:
-          path: hello
-          method: get
+          path: logs
+          method: post
+          cors: true
+
+resources:
+  Resources:
+    # API Gateway
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: "ApiGatewayRestApi"
+
+    # FOOD LOGS Table
+    FoodLogsDynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: foodLogId
+            AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: foodLogId
+            KeyType: RANGE
+        LocalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.CREATED_AT_INDEX}
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.FOOD_LOGS_TABLE}
