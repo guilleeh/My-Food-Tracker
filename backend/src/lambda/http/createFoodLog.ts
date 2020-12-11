@@ -7,7 +7,7 @@ const logger = createLogger('createFoodLog')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const foodLog: CreateFoodLogRequest = JSON.parse(event.body)
-  const userId = '123'
+  const userId = event.requestContext.identity.cognitoIdentityId
 
   const newFoodLog = await createFoodLog(userId, foodLog)
 

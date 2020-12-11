@@ -58,6 +58,7 @@ functions:
           path: logs
           method: post
           cors: true
+          authorizer: aws_iam
 
 resources:
   Resources:
