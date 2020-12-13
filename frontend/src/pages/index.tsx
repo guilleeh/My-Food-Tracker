@@ -1,11 +1,10 @@
-import { Navigation } from '../components/Navigation'
+import { Layout } from '../components/layout/Layout'
 import { Home } from '../components/Home'
 
 export default function index() {
   return (
-    <>
-      <Navigation />
+    <Layout>
       <Home />
-    </>
+    </Layout>
   )
 }

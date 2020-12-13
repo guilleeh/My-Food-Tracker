@@ -1,12 +1,11 @@
-import { Navigation } from '../components/Navigation'
+import { Layout } from '../components/layout/Layout'
 
 export default function Custom404() {
   return (
-    <>
-      <Navigation />
+    <Layout>
       <div className='text-center pt-5'>
         <h3>Sorry, page was not found!</h3>
       </div>
-    </>
+    </Layout>
   )
 }

@@ -1,5 +1,9 @@
 import '../../styles/globals.css'
-import { Amplify } from 'aws-amplify';
+import { useState, useEffect } from 'react'
+import { Amplify, Auth } from 'aws-amplify';
+
+import { AppContext } from '../libs/context'
+import { onError } from '../libs/error'
 
 Amplify.configure({
   Auth: {
@@ -25,13 +29,35 @@ Amplify.configure({
   }
 });
 
-console.log(Amplify)
-
 function MyApp({ Component, pageProps }) {
-  console.log
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(true);
+
+  useEffect(() => {
+    onLoad()
+  }, []) // this will only run on the FIRST render
+
+  const onLoad = async () => {
+    try {
+      await Auth.currentSession();
+      setLoggedIn(true)
+    } catch (e) {
+      if (e !== 'No current user') {
+        onError(e)
+      }
+    } finally {
+      setIsAuthenticating(false);
+    }
+  }
+
+
   return (
     <>
-      <Component {...pageProps} />
+      {!isAuthenticating && (
+        <AppContext.Provider value={{ loggedIn, setLoggedIn }} >
+          <Component {...pageProps} />
+        </AppContext.Provider>
+      )}
     </>
   )
 }
