@@ -1,7 +1,7 @@
 import Router from 'next/router'
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
-import { LoadingButton } from '../components/LoadingButton'
+import { LoadingButton } from './LoadingButton'
 
 import { Auth } from "aws-amplify";
 import { useAppContext } from '../libs/context'
