@@ -8,6 +8,7 @@ module.exports = {
     COGNITO_USER_POOL_ID: process.env.COGNITO_USER_POOL_ID,
     COGNITO_APP_CLIENT_ID: process.env.COGNITO_APP_CLIENT_ID,
     COGNITO_IDENTITY_POOL_ID: process.env.COGNITO_IDENTITY_POOL_ID,
+    MAX_FILE_SIZE: process.env.MAX_FILE_SIZE,
     API_ENDPOINT: 'http://localhost:8000',
   }
 };
