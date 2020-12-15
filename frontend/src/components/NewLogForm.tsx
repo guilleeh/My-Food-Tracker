@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col'
 import { LoadingButton } from './LoadingButton'
 import { onError } from '../libs/error'
 import { useFormFields } from '../libs/hooks'
-import { s3Upload } from '../libs/aws'
+import { uploadFile } from '../api/logs-api'
 import { API } from "aws-amplify";
 import styles from './modules/NewLog.module.css'
 
@@ -37,20 +37,21 @@ export const NewLogForm = () => {
     setIsLoading(true)
 
     try {
-      const attachment = file.current ? await s3Upload(file.current) : null
-
       const { calories, name, type } = fields
 
       const content = {
-        calories, name, type, attachment
+        calories, name, type
       }
 
       const log = await createNewLog(content)
       const { item } = log
       const { foodLogId, userId } = item
       const info = { foodLogId, userId }
-      const response = await getSignedUrl(info)
-      console.log(response)
+
+      if (file.current) {
+        const { uploadUrl } = await getSignedUrl(info)
+        await uploadFile(uploadUrl, file.current)
+      }
       Router.push('/')
     } catch (e) {
       onError(e)

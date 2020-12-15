@@ -135,7 +135,7 @@ resources:
     FilesBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:provider.environment.FILE_LOGS_S3_BUCKET}
+        BucketName: ${self:provider.environment.FOOD_LOGS_S3_BUCKET}
         CorsConfiguration:
           CorsRules:
             - AllowedHeaders:
