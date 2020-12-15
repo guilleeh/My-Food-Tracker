@@ -6,12 +6,13 @@ import { BsArrowRepeat } from 'react-icons/bs'
 export const LoadingButton = ({ isLoading, className = '', disabled = false, ...props }) => {
   return (
     <Button
-      disabled={disabled || isLoading}
+      disabled={disabled || isLoading
+      }
       className={`${styles.LoadingButton} ${className}`}
       {...props}
     >
-      {isLoading && <BsArrowRepeat className={styles.spinning} />}
-      {props.children}
+      { isLoading && <BsArrowRepeat className={styles.spinning} />}
+      { props.children}
     </Button>
   )
 }

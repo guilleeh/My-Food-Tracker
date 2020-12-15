@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col'
 import { LoadingButton } from './LoadingButton'
 import { onError } from '../libs/error'
 import { useFormFields } from '../libs/hooks'
+import { s3Upload } from '../libs/aws'
 import { API } from "aws-amplify";
 import styles from './modules/NewLog.module.css'
 
@@ -36,11 +37,20 @@ export const NewLogForm = () => {
     setIsLoading(true)
 
     try {
+      const attachment = file.current ? await s3Upload(file.current) : null
+
       const { calories, name, type } = fields
+
       const content = {
-        calories, name, type
+        calories, name, type, attachment
       }
-      await createNewLog(content)
+
+      const log = await createNewLog(content)
+      const { item } = log
+      const { foodLogId, userId } = item
+      const info = { foodLogId, userId }
+      const response = await getSignedUrl(info)
+      console.log(response)
       Router.push('/')
     } catch (e) {
       onError(e)
@@ -51,6 +61,12 @@ export const NewLogForm = () => {
   const createNewLog = (log) => {
     return API.post('logs', 'logs', {
       body: log
+    })
+  }
+
+  const getSignedUrl = (info) => {
+    return API.post('logs', 'logs/upload', {
+      body: info
     })
   }
 
@@ -79,7 +95,6 @@ export const NewLogForm = () => {
             <Form.Label>Food Type</Form.Label>
             <Form.Control
               as='select'
-              defaultValue='Choose food type...'
               value={fields.type}
               onChange={handleFieldChange}
             >

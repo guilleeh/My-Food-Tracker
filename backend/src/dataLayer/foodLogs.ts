@@ -19,4 +19,15 @@ export default class FoodLogs {
     }).promise()
   }
 
+  async getSingleFoodLog(userId: string, foodLogId: string): Promise<AWS.DynamoDB.QueryOutput> {
+    return await this.docClient.query({
+      TableName: this.foodLogsTable,
+      KeyConditionExpression: 'userId = :user and foodLogId = :log',
+      ExpressionAttributeValues: {
+        ':user': userId,
+        ':log': foodLogId
+      }
+    }).promise()
+  }
+
 }
