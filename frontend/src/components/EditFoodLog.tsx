@@ -40,9 +40,10 @@ export const EditFoodLog = () => {
   }, [id])
 
   const saveFoodLog = (foodLog) => {
+    const calories = Number(foodLog.calories)
     const log = {
       name: foodLog.name,
-      calories: foodLog.calories,
+      calories,
       type: foodLog.type
     }
 
