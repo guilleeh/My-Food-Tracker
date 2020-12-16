@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Router from 'next/router'
-import Image from 'next/image'
 import { useAppContext } from '../libs/context'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from "react-bootstrap/Nav";
@@ -20,10 +19,12 @@ export const Navigation = () => {
   return (
     <div className='container py-3'>
       <Navbar collapseOnSelect bg='light' expand='md' className='mb-3'>
-        <Navbar.Brand className='font-weight-bold text-muted'>
-          <img src='/img/logo.png' alt='Picture of My Food Tracker logo' width={25} height={25} className='mb-1' />{' '}
+        <Link href='/'>
+          <Navbar.Brand className='font-weight-bold text-muted'>
+            <img src='/img/logo.png' alt='Picture of My Food Tracker logo' width={25} height={25} className='mb-1' />{' '}
           My Food Tracker
         </Navbar.Brand>
+        </Link>
         <Navbar.Toggle />
         <Navbar.Collapse className='justify-content-end'>
           {loggedIn ? (

@@ -29,7 +29,7 @@ export const LoginForm = () => {
     try {
       await Auth.signIn(fields.email, fields.password)
       setLoggedIn(true)
-      Router.push('/')
+      Router.push('/logs')
     } catch (e) {
       onError(e)
       setIsLoading(false)

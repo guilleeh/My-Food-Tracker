@@ -21,6 +21,18 @@ export const createFoodLog = async (userId: string, createFoodLogRequest: Create
   return newFoodLog
 }
 
+export const getFoodLogs = async (userId: string): Promise<AWS.DynamoDB.DocumentClient.ItemList> => {
+  const items = await FoodLogsAccess.getFoodLogs(userId)
+  for (const item of items) {
+    const url = await getAttachmentsUrl(item.foodLogId)
+    if (url) {
+      item.attachmentUrl = url
+    }
+  }
+
+  return items
+}
+
 export async function getSingleFoodLog(userId: string, foodLogId: string): Promise<AWS.DynamoDB.QueryOutput> {
   return await FoodLogsAccess.getSingleFoodLog(userId, foodLogId)
 }
