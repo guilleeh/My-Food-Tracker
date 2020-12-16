@@ -58,7 +58,7 @@ export const SignupForm = () => {
       await Auth.signIn(fields.email, fields.password)
 
       setLoggedIn(true)
-      Router.push('/')
+      Router.push('/logs')
     } catch (e) {
       onError(e)
     } finally {
@@ -70,7 +70,7 @@ export const SignupForm = () => {
     return (
       <Form onSubmit={handleConfirmationSubmit}>
         <Form.Group controlId='confirmationCode'>
-          <Form.Label>Confirmation Code</Form.Label>
+          <Form.Label>Confirmation Code - (Sent via email)</Form.Label>
           <Form.Control autoFocus type='tel' onChange={handleFieldChange} value={fields.confirmationCode} />
         </Form.Group>
         <LoadingButton block size='lg' type='submit' variant='success' isLoading={isLoading} disabled={!validateConfirmationForm()}>
