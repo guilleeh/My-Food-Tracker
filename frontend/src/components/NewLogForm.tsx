@@ -12,7 +12,7 @@ import styles from './modules/NewLog.module.css'
 export const NewLogForm = () => {
   const file = useRef(null)
   const [fields, handleFieldChange] = useFormFields({
-    calories: 0,
+    calories: '',
     name: '',
     type: ''
   })
@@ -37,8 +37,8 @@ export const NewLogForm = () => {
     setIsLoading(true)
 
     try {
-      const { calories, name, type } = fields
-
+      const { name, type } = fields
+      const calories = Number(fields.calories)
       const content = {
         calories, name, type
       }

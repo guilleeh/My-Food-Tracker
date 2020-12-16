@@ -24,7 +24,7 @@ export const FoodLogs = () => {
             <span className="ml-2 font-weight-bold">Create a new food log</span>
           </ListGroup.Item>
         </Link>
-        {items.map(({ foodLogId, name, createdAt }) => (
+        {items.length > 0 ? items.map(({ foodLogId, name, createdAt }) => (
           <Link key={foodLogId} href={`/logs/${foodLogId}`}>
             <ListGroup.Item action>
               <span className="font-weight-bold">
@@ -36,7 +36,7 @@ export const FoodLogs = () => {
               </span>
             </ListGroup.Item>
           </Link>
-        ))}
+        )) : <h3 className='text-center mt-5'>You have no food logs.</h3>}
       </>
     );
   }
@@ -44,12 +44,12 @@ export const FoodLogs = () => {
   useEffect(() => {
     async function onLoad() {
       if (!loggedIn) {
+        Router.push('/')
         return;
       }
 
       try {
         const logs = await loadNotes();
-        console.log(logs)
         setLogs(logs);
       } catch (e) {
         onError(e);

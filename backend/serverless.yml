@@ -28,6 +28,13 @@ custom:
         version: v1.0.0
         title: My Food Tracker API
         description: Serverless application for logging your food.
+    models:
+      - name: CreateFoodLog
+        contentType: application/json
+        schema: ${file(src/schemas/create-food-log.json)}
+      - name: UpdateFoodLog
+        contentType: application/json
+        schema: ${file(src/schemas/create-food-log.json)}
 
 functions:
   CreateFoodLog:
@@ -55,6 +62,12 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create a new Food log
+            description: Create a new Food log
+            requestModels:
+              'application/json': CreateFoodLog
 
   GetFoodLogs:
     handler: src/lambda/http/getFoodLogs.handler
@@ -149,6 +162,12 @@ functions:
           path: logs/{logId}
           authorizer: aws_iam
           cors: true
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Update a Food log
+            description: Update a Food log
+            requestModels:
+              'application/json': UpdateFoodLog
 
   DeleteFoodLog:
     handler: src/lambda/http/deleteFoodLog.handler
@@ -264,3 +283,12 @@ resources:
                 - PUT
                 - DELETE
                 - HEAD
+    
+    RequestBodyValidator:
+      Type: AWS::ApiGateway::RequestValidator
+      Properties:
+        Name: 'request-body-validator'
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: false

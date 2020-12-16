@@ -95,10 +95,7 @@ export const EditFoodLog = () => {
       if (file.current) {
         const info = { foodLogId: id }
 
-        console.log(info)
-
         const { uploadUrl } = await getSignedUrl(info)
-        console.log(uploadUrl)
         await uploadFile(uploadUrl, file.current)
       }
 
@@ -201,7 +198,7 @@ export const EditFoodLog = () => {
                 disabled={!validateForm()}
               >
                 Update
-          </LoadingButton>
+              </LoadingButton>
             </div>
           </div>
         </Form>
