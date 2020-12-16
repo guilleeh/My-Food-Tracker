@@ -5,6 +5,9 @@ This is my Capstone project for the Udacity Cloud Developer Nanodegree. My Food 
 
 ![Image of app](https://i.ibb.co/R6JhTQ4/Screen-Shot-2020-12-16-at-1-42-00-PM.png)
 
+## Demo
+Live site : [https://5fda7c6853f3f00008fd0a03--clever-joliot-8051fe.netlify.app/](https://5fda7c6853f3f00008fd0a03--clever-joliot-8051fe.netlify.app/)
+
 ## Technologies
 - Backend
   - Serverless Framework
@@ -16,7 +19,17 @@ This is my Capstone project for the Udacity Cloud Developer Nanodegree. My Food 
   - React Icons
   - Axios
   - AWS Amplify
-  - 
+- Deployment
+  - Netlify
+
+## Future Plans
+  - [ ] Forgot Password Flow
+  - [ ] Analytics for specified time frame
+  - [ ] Delete image on food log remove
+  - [ ] Add Google Recaptcha on Sign Up
+  - [ ] Better support for mobile
+  - [ ] Image search
+  - [ ] Admin Dashboard(App health & monitor)
 
 
 ## Git Commit Syntax

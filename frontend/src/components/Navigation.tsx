@@ -19,7 +19,7 @@ export const Navigation = () => {
   return (
     <div className='container py-3'>
       <Navbar collapseOnSelect bg='light' expand='md' className='mb-3'>
-        <Link href='/'>
+        <Link href={loggedIn ? '/logs' : '/'}>
           <Navbar.Brand className='font-weight-bold text-muted'>
             <img src='/img/logo.png' alt='Picture of My Food Tracker logo' width={25} height={25} className='mb-1' />{' '}
           My Food Tracker

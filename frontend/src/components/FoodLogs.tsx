@@ -24,16 +24,23 @@ export const FoodLogs = () => {
             <span className="ml-2 font-weight-bold">Create a new food log</span>
           </ListGroup.Item>
         </Link>
-        {items.length > 0 ? items.map(({ foodLogId, name, createdAt }) => (
+        {items.length > 0 ? items.map(({ foodLogId, name, createdAt, attachmentUrl }) => (
           <Link key={foodLogId} href={`/logs/${foodLogId}`}>
             <ListGroup.Item action>
-              <span className="font-weight-bold">
-                {name.trim().split("\n")[0]}
-              </span>
-              <br />
-              <span className="text-muted">
-                Created: {new Date(createdAt).toLocaleString()}
-              </span>
+              <div style={{ display: 'flex' }}>
+                <div>
+                  {attachmentUrl && <img src={attachmentUrl} width='50px' height='50px' />}
+                </div>
+                <div style={{ display: 'block' }}>
+                  <span className="font-weight-bold">
+                    {name.trim().split("\n")[0]}
+                  </span>
+                  <br />
+                  <span className="text-muted block">
+                    Created: {new Date(createdAt).toLocaleString()}
+                  </span>
+                </div>
+              </div>
             </ListGroup.Item>
           </Link>
         )) : <h3 className='text-center mt-5'>You have no food logs.</h3>}
