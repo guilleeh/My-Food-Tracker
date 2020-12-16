@@ -1,5 +1,6 @@
 import * as uuid from 'uuid'
 import { FoodLog } from "../models/FoodLog";
+import { FoodLogUpdate } from '../models/FoodLogUpdate'
 import { CreateFoodLogRequest } from "../requests/CreateFoodLogRequest";
 
 import FoodLogs from '../dataLayer/foodLogs'
@@ -35,6 +36,10 @@ export const getFoodLogs = async (userId: string): Promise<AWS.DynamoDB.Document
 
 export async function getSingleFoodLog(userId: string, foodLogId: string): Promise<AWS.DynamoDB.QueryOutput> {
   return await FoodLogsAccess.getSingleFoodLog(userId, foodLogId)
+}
+
+export async function updateFoodLog(userId: string, foodLogId: string, updatedFoodLog: FoodLogUpdate): Promise<void> {
+  return await FoodLogsAccess.updateFoodLog(userId, foodLogId, updatedFoodLog)
 }
 
 export const getAttachmentsUrl = async (foodLogId: string): Promise<string> => {

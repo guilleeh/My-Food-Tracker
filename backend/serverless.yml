@@ -94,6 +94,66 @@ functions:
           cors: true
           authorizer: aws_iam
 
+  GetSingleFoodLog:
+    handler: src/lambda/http/getFoodLogs.handler
+    iamRoleStatementsName: GetSingleFoodLog
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FOOD_LOGS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FOOD_LOGS_TABLE}/index/${self:provider.environment.CREATED_AT_INDEX}
+      - Effect: Allow
+        Action:
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:provider.environment.FOOD_LOGS_S3_BUCKET}/*
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+        Resource: "*"
+      - Effect: Allow
+        Action:
+          - logs:CreateLogStream
+          - logs:CreateLogGroup
+          - logs:PutLogEvents
+          - events:PutRule
+        Resource: "*"
+    events:
+      - http:
+          method: get
+          path: logs/{logId}
+          cors: true
+          authorizer: aws_iam
+        
+  UpdateFoodLog:
+    handler: src/lambda/http/updateFoodLog.handler
+    iamRoleStatementsName: UpdateFoodLog
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FOOD_LOGS_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+        Resource: "*"
+      - Effect: Allow
+        Action:
+          - logs:CreateLogStream
+          - logs:CreateLogGroup
+          - logs:PutLogEvents
+        Resource: "*"
+    events:
+      - http:
+          method: patch
+          path: logs/{logId}
+          authorizer: aws_iam
+          cors: true
+
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
     iamRoleStatementsName: GenerateUploadUrlForFoodLog

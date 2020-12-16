@@ -3,7 +3,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } f
 import { createLogger } from '../../utils/logger'
 import { getFoodLogs } from '../../businessLayer/foodLogs';
 
-const logger = createLogger('createTodo')
+const logger = createLogger('getFoodLogs')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const userId = event.requestContext.identity.cognitoIdentityId
