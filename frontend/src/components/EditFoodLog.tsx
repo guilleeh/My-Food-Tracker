@@ -81,9 +81,11 @@ export const EditFoodLog = () => {
 
     e.preventDefault();
 
+    const max = Number(process.env.MAX_ATTACHMENT_SIZE)
+
     if (file.current && file.current.size > process.env.MAX_ATTACHMENT_SIZE) {
       alert(
-        `Please pick a file smaller than ${process.env.MAX_ATTACHMENT_SIZE /
+        `Please pick a file smaller than ${max /
         1000000} MB.`
       );
       return;

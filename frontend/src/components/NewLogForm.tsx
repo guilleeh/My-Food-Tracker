@@ -29,8 +29,10 @@ export const NewLogForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    const max = Number(process.env.MAX_ATTACHMENT_SIZE)
+
     if (file.current && file.current.size > process.env.MAX_FILE_SIZE) {
-      alert(`Please pick a file smaller than ${process.env.MAX_FILE_SIZE / 1000000}`)
+      alert(`Please pick a file smaller than ${max / 1000000}`)
       return;
     }
 
