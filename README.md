@@ -1,4 +1,23 @@
 # My Food Tracker
+[![Netlify Status](https://api.netlify.com/api/v1/badges/a476d24e-76ec-49c8-bdc9-3788fb13013c/deploy-status)](https://app.netlify.com/sites/clever-joliot-8051fe/deploys)
+
+This is my Capstone project for the Udacity Cloud Developer Nanodegree. My Food Tracker lets you log the food you eat throughout the day. You can add calories and a picture of your food to to see just exactly all you eat.
+
+![Image of app](https://i.ibb.co/R6JhTQ4/Screen-Shot-2020-12-16-at-1-42-00-PM.png)
+
+## Technologies
+- Backend
+  - Serverless Framework
+  - Node.js
+  - AWS Cognito
+- Frontend
+  - Next.js
+  - React Bootstrap
+  - React Icons
+  - Axios
+  - AWS Amplify
+  - 
+
 
 ## Git Commit Syntax
 According to Semantic-Release, we need to follow some commit message guidelines in order for automatic versioning to work.   
