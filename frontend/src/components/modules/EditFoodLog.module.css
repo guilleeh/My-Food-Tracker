@@ -1,0 +1,23 @@
+.log {
+  display: flex;
+  justify-content: space-between;
+}
+
+.maxWidth {
+  max-width: 800px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.update {
+  width: 150px;
+}
+
+@media (max-width: 992px) {
+  .log {
+    display: block;
+  }
+}

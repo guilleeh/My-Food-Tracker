@@ -1,10 +1,6 @@
 # NOTE: update this with your service name
 service: my-food-tracker-api
 
-# Create an optimized package for our functions 
-package:
-  individually: true
-
 plugins:
   - serverless-webpack
   - serverless-reqvalidator-plugin
@@ -95,7 +91,7 @@ functions:
           authorizer: aws_iam
 
   GetSingleFoodLog:
-    handler: src/lambda/http/getFoodLogs.handler
+    handler: src/lambda/http/getSingleFoodLog.handler
     iamRoleStatementsName: GetSingleFoodLog
     iamRoleStatements:
       - Effect: Allow
@@ -153,6 +149,32 @@ functions:
           path: logs/{logId}
           authorizer: aws_iam
           cors: true
+
+  DeleteFoodLog:
+    handler: src/lambda/http/deleteFoodLog.handler
+    iamRoleStatementsName: DeleteFoodLog
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FOOD_LOGS_TABLE}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+        Resource: "*"
+      - Effect: Allow
+        Action:
+          - logs:CreateLogStream
+          - logs:CreateLogGroup
+          - logs:PutLogEvents
+        Resource: "*"
+    events:
+      - http:
+          method: delete
+          path: logs/{logId}
+          cors: true
+          authorizer: aws_iam
 
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler

@@ -26,8 +26,8 @@ export default class FoodLogs {
     return result.Items as FoodLog[]
   }
 
-  async getSingleFoodLog(userId: string, foodLogId: string): Promise<AWS.DynamoDB.QueryOutput> {
-    return await this.docClient.query({
+  async getSingleFoodLog(userId: string, foodLogId: string): Promise<FoodLog[]> {
+    const result = await this.docClient.query({
       TableName: this.foodLogsTable,
       KeyConditionExpression: 'userId = :user and foodLogId = :log',
       ExpressionAttributeValues: {
@@ -35,6 +35,8 @@ export default class FoodLogs {
         ':log': foodLogId
       }
     }).promise()
+
+    return result.Items as FoodLog[]
   }
 
   async createFoodLog(foodLog: FoodLog): Promise<void> {
@@ -51,14 +53,25 @@ export default class FoodLogs {
         userId,
         foodLogId
       },
-      UpdateExpression: 'SET #name = :n, type = :type, calories = :cal',
+      UpdateExpression: 'SET #name = :n, #type = :type, calories = :cal',
       ExpressionAttributeValues: {
         ":n": updatedFoodLog.name,
         ":type": updatedFoodLog.type,
         ":cal": updatedFoodLog.calories
       },
       ExpressionAttributeNames: {
-        "#name": "name"
+        "#name": "name",
+        "#type": "type"
+      }
+    }).promise()
+  }
+
+  async deleteFoodLog(userId: string, foodLogId: string): Promise<void> {
+    await this.docClient.delete({
+      TableName: this.foodLogsTable,
+      Key: {
+        userId,
+        foodLogId
       }
     }).promise()
   }

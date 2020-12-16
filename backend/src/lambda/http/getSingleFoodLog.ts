@@ -5,11 +5,13 @@ import { getSingleFoodLog } from '../../businessLayer/foodLogs'
 const logger = createLogger('getSingleFoodLog')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const foodLogId: string = event.pathParameters.todoId
+  const foodLogId: string = event.pathParameters.logId
+  logger.info(event.pathParameters)
   const userId = event.requestContext.identity.cognitoIdentityId
   const foodLog = await getSingleFoodLog(userId, foodLogId)
+  logger.info(foodLog)
 
-  if (foodLog.Count === 0) {
+  if (foodLog.length === 0) {
     logger.warn(`Cannot find food log id: ${foodLogId} for user id: ${userId}. It does not exist!`)
     return {
       statusCode: 400,

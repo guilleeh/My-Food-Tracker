@@ -1,13 +1,11 @@
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
 import { createLogger } from '../../utils/logger'
-import { UpdateFoodLogRequest } from '../../requests/UpdateFoodLogRequest'
-import { getSingleFoodLog, updateFoodLog } from '../../businessLayer/foodLogs'
+import { getSingleFoodLog, deleteFoodLog } from '../../businessLayer/foodLogs'
 
-const logger = createLogger('updateFoodLog')
+const logger = createLogger('deleteFoodLog')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const foodLogId: string = event.pathParameters.logId
-  const updatedFoodLog: UpdateFoodLogRequest = JSON.parse(event.body)
   const userId = event.requestContext.identity.cognitoIdentityId
   const foodLog = await getSingleFoodLog(userId, foodLogId)
 
@@ -25,24 +23,24 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
 
   try {
-    logger.info('updatingFoodLog',)
-    await updateFoodLog(userId, foodLogId, updatedFoodLog)
-    logger.info(`Updated food log id: ${foodLogId} from user id: ${userId} with ${updatedFoodLog}`)
+    await deleteFoodLog(userId, foodLogId)
+
+    logger.info(`Updated food log id: ${foodLogId} from user id: ${userId}`)
     return {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*'
       },
-      body: JSON.stringify('Food log updated successfully!')
+      body: JSON.stringify('Food log deleted successfully!')
     }
   } catch (e) {
-    logger.warn('There was an error updating food log.', e)
+    logger.warn('There was an error deleting food log. ', e)
     return {
       statusCode: 500,
       headers: {
         'Access-Control-Allow-Origin': '*'
       },
-      body: JSON.stringify('Failed to update food log')
+      body: JSON.stringify('Failed to delete food log')
     }
   }
 }

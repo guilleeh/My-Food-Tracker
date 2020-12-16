@@ -52,7 +52,7 @@ export const NewLogForm = () => {
         const { uploadUrl } = await getSignedUrl(info)
         await uploadFile(uploadUrl, file.current)
       }
-      Router.push('/')
+      Router.push('/logs')
     } catch (e) {
       onError(e)
       setIsLoading(false)

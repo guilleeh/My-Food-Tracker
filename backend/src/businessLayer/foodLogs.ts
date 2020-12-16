@@ -34,12 +34,25 @@ export const getFoodLogs = async (userId: string): Promise<AWS.DynamoDB.Document
   return items
 }
 
-export async function getSingleFoodLog(userId: string, foodLogId: string): Promise<AWS.DynamoDB.QueryOutput> {
-  return await FoodLogsAccess.getSingleFoodLog(userId, foodLogId)
+export async function getSingleFoodLog(userId: string, foodLogId: string): Promise<FoodLog[]> {
+  const items = await FoodLogsAccess.getSingleFoodLog(userId, foodLogId)
+
+  for (const item of items) {
+    const url = await getAttachmentsUrl(item.foodLogId)
+    if (url) {
+      item.attachmentUrl = url
+    }
+  }
+
+  return items
 }
 
 export async function updateFoodLog(userId: string, foodLogId: string, updatedFoodLog: FoodLogUpdate): Promise<void> {
   return await FoodLogsAccess.updateFoodLog(userId, foodLogId, updatedFoodLog)
+}
+
+export const deleteFoodLog = async (userId: string, foodLogId: string): Promise<void> => {
+  return await FoodLogsAccess.deleteFoodLog(userId, foodLogId)
 }
 
 export const getAttachmentsUrl = async (foodLogId: string): Promise<string> => {
